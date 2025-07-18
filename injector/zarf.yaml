@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: injector
+components:
+  # This package moves the injector & registries binaries
+  - name: zarf-injector
+    required: true
+    only:
+      cluster:
+        architecture: arm64
+    files:
+      - source: ./artifacts/decompress/components/zarf-injector/files/0/zarf-injector
+        target: "###ZARF_TEMP###/zarf-injector"
+        shasum: "###ZARF_PKG_TMPL_INJECTOR_ARM64_SHASUM###"
+        executable: true
+    actions:
+      onCreate:
+        before:
+          - description: create temp dir
+            mute: true
+            cmd: |-
+              mkdir -p artifacts
+          - description: pull down the binaries.
+            mute: true
+            dir: artifacts
+            cmd: |
+              rm -rf decompress zarf-init-*.tar.zst zarf_*_Linux_arm64
+              curl -s -LO https://github.com/zarf-dev/zarf/releases/download/###ZARF_PKG_TMPL_AGENT_IMAGE_TAG###/zarf-init-arm64-###ZARF_PKG_TMPL_AGENT_IMAGE_TAG###.tar.zst
+              ./zarf tools archiver decompress ./zarf-init-arm64-###ZARF_PKG_TMPL_AGENT_IMAGE_TAG###.tar.zst ./decompress
+              tar -xf ./decompress/components/zarf-injector.tar -C ./decompress/components
+            maxRetries: 2
+        after:
+          - description: clean temp dir
+            mute: true
+            cmd: |-
+              rm -rf artifacts
