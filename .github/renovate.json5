@@ -1,0 +1,46 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  assignees: [
+    "@A1994SC"
+  ],
+  packageRules: [
+    {
+      matchDatasources: [
+        "docker"
+      ],
+      addLabels: [
+        "renovate/oci"
+      ],
+      groupName: "Zarf packages",
+      matchPackageNames: [
+        "ghcr.io/zarf-dev/packages/init",
+        "ghcr.io/zarf-dev/zarf/agent"
+      ]
+    },
+  ],
+  separateMajorMinor: false,
+  "github-actions": {
+    enabled: false
+  },
+  dependencyDashboard: true,
+  customManagers: [
+    {
+      customType: "regex",
+      description: [
+        "Process custom dependencies"
+      ],
+      managerFilePatterns: [
+        "/(^|/).+\\.ya?ml(\\.j2)?$/"
+      ],
+      matchStrings: [
+        "(?m:# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\n.+?(?<currentValue>v?([0-9]+\\.?){3}(-.+)?$))",
+        "(?m:# renovate: datasource=(?<datasource>\\S+)\n.+: (?:oci:/{2})?(?<depName>[a-z0-9\\.].+):(?<currentValue>v?([0-9]+\\.?){3}(-.+)?$))"
+      ],
+      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}"
+    },
+  ],
+}
