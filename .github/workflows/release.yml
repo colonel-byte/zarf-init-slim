@@ -18,6 +18,8 @@ jobs:
       packages: write
     strategy:
       fail-fast: false
+      # run only one at a time to allow end result tag to have all the correct "arch"
+      max-parallel: 1
       matrix:
         types:
           - skeleton
