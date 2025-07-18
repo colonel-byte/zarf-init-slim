@@ -57,9 +57,9 @@ jobs:
       - name: Publish Zarf package
         if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package publish --signing-key env://COSIGN_KEY zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}
+          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}
 
       - name: Publish Zarf package, skeleton
         if: ${{ matrix.types == 'skeleton' }}
         run: |-
-          zarf package publish --signing-key env://COSIGN_KEY . oci://ghcr.io/${{ github.repository_owner }}
+          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} . oci://ghcr.io/${{ github.repository_owner }}
