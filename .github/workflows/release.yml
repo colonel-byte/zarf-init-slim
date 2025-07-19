@@ -21,8 +21,9 @@ jobs:
       # run only one at a time to allow end result tag to have all the correct "arch"
       max-parallel: 1
       matrix:
+        flavor:
+          - upstream
         types:
-          - skeleton
           - amd64
           - arm64
     outputs:
@@ -54,14 +55,8 @@ jobs:
       - name: Package Zarf package
         if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package create --confirm . --architecture ${{ matrix.types }}
+          zarf package create --confirm . --architecture ${{ matrix.types }} --flavor ${{ matrix.flavor }}
 
       - name: Publish Zarf package
-        if: ${{ matrix.types != 'skeleton' }}
         run: |-
           zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}
-
-      - name: Publish Zarf package, skeleton
-        if: ${{ matrix.types == 'skeleton' }}
-        run: |-
-          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} . oci://ghcr.io/${{ github.repository_owner }}
