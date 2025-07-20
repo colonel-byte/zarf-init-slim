@@ -18,26 +18,18 @@ jobs:
       packages: write
     strategy:
       fail-fast: false
-      # run only one at a time to allow end result tag to have all the correct "arch"
-      max-parallel: 1
       matrix:
         flavor:
           - upstream
+          - registry1
         types:
           - amd64
           - arm64
-    outputs:
-      git-tag: ${{ steps.describe.outputs.git_describe }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-
-      - name: Get git info
-        id: describe
-        run: |-
-          echo "git_describe=$(git describe --first-parent --tags)" >> "$GITHUB_OUTPUT"
 
       - name: Install The Latest Release Version of Zarf
         uses: zarf-dev/setup-zarf@10e539efed02f75ec39eb8823e22a5c795f492ae # v1.0.1
@@ -49,12 +41,48 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Login to Registry1
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        if: ${{ matrix.flavor == 'registry1' }}
+        with:
+          registry: registry1.dso.mil
+          username: ${{ secrets.REG_ONE_USER }}
+          password: ${{ secrets.REG_ONE_TOKEN }}
+
       - name: Package Zarf package
+        if: ${{ matrix.flavor == 'upstream' }}
         run: |-
-          zarf package create --confirm . --architecture ${{ matrix.types }} --flavor ${{ matrix.flavor }} --set version=${{ steps.describe.outputs.git_describe }} --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }}
+          zarf package create --confirm . \
+            --architecture ${{ matrix.types }} \
+            --flavor ${{ matrix.flavor }} \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }}
         env:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
 
+      - name: Package Zarf package
+        if: ${{ matrix.flavor == 'registry1' }}
+        run: |-
+          zarf package create --confirm . \
+            --architecture ${{ matrix.types }} \
+            --flavor ${{ matrix.flavor }} \
+            --set registry_image_domain='${{ env.ZARF_REGISTRY_IMAGE_DOMAIN }}' \
+            --set registry_image='${{ env.ZARF_REGISTRY_IMAGE }}' \
+            --set agent_image_domain='${{ env.ZARF_AGENT_IMAGE_DOMAIN }}' \
+            --set agent_image='${{ env.ZARF_AGENT_IMAGE }}' \
+            --set gitea_image='${{ env.ZARF_GITEA_IMAGE }}' \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }}
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+          ZARF_REGISTRY_IMAGE_DOMAIN: "registry1.dso.mil/"
+          ZARF_REGISTRY_IMAGE: "ironbank/opensource/docker/registry-v3"
+          ZARF_AGENT_IMAGE_DOMAIN: "registry1.dso.mil/"
+          ZARF_AGENT_IMAGE: "ironbank/opensource/zarf-dev/zarf/zarf-agent"
+          ZARF_GITEA_IMAGE: "registry1.dso.mil/ironbank/opensource/go-gitea/gitea:v1.24.3"
+
       - name: Publish Zarf package
         run: |-
-          zarf package publish zarf-*.zst oci://ghcr.io/${{ github.repository_owner }} --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub
+          zarf package publish zarf-*.zst \
+            oci://ghcr.io/${{ github.repository_owner }} \
+            --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub
