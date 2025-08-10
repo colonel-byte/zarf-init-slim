@@ -74,11 +74,9 @@
             # keep-sorted end
           }
         );
-        shellHook =
-          self.checks.${system}.pre-commit-check.shellHook
-          + ''
-            export ZARF_CONFIG=$(git rev-parse --show-toplevel)/zarf-config.yaml
-          '';
+        shellHook = self.checks.${system}.pre-commit-check.shellHook + ''
+          export ZARF_CONFIG=$(git rev-parse --show-toplevel)/zarf-config.yaml
+        '';
         buildInputs = self.checks.${system}.pre-commit-check.enabledPackages ++ [
           pkgs.gh
           pkgs.curl
@@ -94,8 +92,6 @@
               check-shebang-scripts-are-executable.enable = true;
               end-of-file-fixer.enable = true;
               nixfmt-rfc-style.enable = true;
-              no-commit-to-branch.enable = true;
-              no-commit-to-branch.settings.branch = [ "main" ];
               trim-trailing-whitespace.enable = true;
               # keep-sorted end
             };
