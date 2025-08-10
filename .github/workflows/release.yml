@@ -84,5 +84,5 @@ jobs:
       - name: Publish Zarf package
         run: |-
           zarf package publish zarf-*.zst \
-            oci://ghcr.io/${{ github.repository_owner }} \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
             --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub

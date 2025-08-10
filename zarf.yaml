@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
 kind: ZarfInitConfig
 metadata:
-  name: zarf-init-slim
+  name: slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
   version: v0.60.0
   source: https://github.com/colonel-byte/zarf-slim-init
