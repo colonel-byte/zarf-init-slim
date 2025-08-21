@@ -21,7 +21,6 @@ jobs:
       matrix:
         flavor:
           - upstream
-          - registry1
         types:
           - amd64
           - arm64
