@@ -4,10 +4,7 @@ package:
   oci_concurrency: 15
   create:
     set:
-      # required when import the `zarf-init` package
-      injector_version: "2025-03-24"
-      injector_amd64_shasum: a78d66b9e2b00a22edd9b4e6432a4d934621e3757f09493b12f688c7c9baca93
-      injector_arm64_shasum: 32c4cfc9c2082affea519903e707bfb9b3a454fa8c003042f0a35925e72fe3bc
+      injector_arm64_shasum: 7a677809accc0d3d9b1cddc8d6be07ebf0a883a1db887e50828bb3df0e824577
 
       registry_image_domain: 'ghcr.io/'
       registry_image: 'distribution/distribution'
