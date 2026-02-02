@@ -17,7 +17,7 @@ package:
       agent_image_tag: v0.70.1
 
       # renovate: datasource=docker depName=docker.io/gitea/gitea
-      gitea_image: ghcr.io/go-gitea/gitea:1.25.1-rootless
+      gitea_image: ghcr.io/go-gitea/gitea:1.25.4-rootless
 
       proxy_image_domain: 'docker.io/'
       proxy_image: 'alpine/socat'
