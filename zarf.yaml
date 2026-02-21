@@ -4,7 +4,7 @@ kind: ZarfInitConfig
 metadata:
   name: slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
-  version: v0.70.1
+  version: v0.73.0
   source: https://github.com/colonel-byte/zarf-slim-init
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-slim-init"
@@ -17,7 +17,7 @@ components:
         architecture: amd64
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.70.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.73.0
 
   # Pulls in the zarf-injector
   - name: zarf-injector
@@ -33,25 +33,25 @@ components:
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.70.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.73.0
 
   # Creates the permanent registry
   - name: zarf-registry
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.70.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.73.0
 
   # Creates the pod+git mutating webhook
   - name: zarf-agent
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.70.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.73.0
 
   # Adds a git server to the cluster
   - name: git-server
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.70.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.73.0
