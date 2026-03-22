@@ -1,0 +1,21 @@
+---
+persistence:
+  enabled: false
+
+image:
+  repository: "###ZARF_SEED_REGISTRY###/###ZARF_CONST_REGISTRY_IMAGE###"
+  tag: "###ZARF_CONST_REGISTRY_IMAGE_TAG###"
+
+autoscaling:
+  enabled: false
+
+extraEnvVars:
+  - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+    value: "/var/lib/registry"
+
+secrets:
+  configData:
+    storage:
+      filesystem:
+        rootdirectory: /var/lib/registry
+        maxthreads: 100

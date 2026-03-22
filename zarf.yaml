@@ -34,6 +34,10 @@ components:
     import:
       # renovate: datasource=docker
       url: oci://ghcr.io/zarf-dev/packages/init:v0.74.0
+    charts:
+      - name: docker-registry
+        valuesFiles:
+          - values/registry-seed.yaml
 
   # Creates the permanent registry
   - name: zarf-registry
