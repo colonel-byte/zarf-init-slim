@@ -37,6 +37,7 @@ components:
     charts:
       - name: docker-registry
         valuesFiles:
+          - values/registry-core.yaml
           - values/registry-seed.yaml
 
   # Creates the permanent registry
