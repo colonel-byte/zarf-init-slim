@@ -4,7 +4,7 @@ kind: ZarfInitConfig
 metadata:
   name: slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
-  version: v0.74.1
+  version: v0.74.2
   source: https://github.com/colonel-byte/zarf-slim-init
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-slim-init"
