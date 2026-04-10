@@ -17,7 +17,7 @@ components:
         architecture: amd64
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.2
 
   # Pulls in the zarf-injector
   - name: zarf-injector
@@ -33,7 +33,7 @@ components:
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.2
     charts:
       - name: docker-registry
         valuesFiles:
@@ -45,18 +45,18 @@ components:
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.2
 
   # Creates the pod+git mutating webhook
   - name: zarf-agent
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.2
 
   # Adds a git server to the cluster
   - name: git-server
     required: false
     import:
       # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.1
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.74.2
