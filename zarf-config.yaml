@@ -9,7 +9,7 @@ package:
       registry_image_domain: 'ghcr.io/'
       registry_image: 'distribution/distribution'
       # renovate: datasource=docker depName=ghcr.io/distribution/distribution
-      registry_image_tag: 3.0.0
+      registry_image_tag: 3.1.0
 
       agent_image_domain: 'ghcr.io/'
       agent_image: 'zarf-dev/zarf/agent'
