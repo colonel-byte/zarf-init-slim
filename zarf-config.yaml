@@ -22,4 +22,4 @@ package:
       proxy_image_domain: 'docker.io/'
       proxy_image: 'alpine/socat'
       # renovate: datasource=docker depName=docker.io/alpine/socat
-      proxy_image_tag: "1.8.0.3"
+      proxy_image_tag: "1.8.1.1"
