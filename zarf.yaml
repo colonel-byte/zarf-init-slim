@@ -8,6 +8,15 @@ metadata:
   source: https://github.com/colonel-byte/zarf-slim-init
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-slim-init"
+variables:
+  - name: AGENT_TOLERATIONS
+    default: |-
+      - operator: "Exists"
+    autoIndent: true
+  - name: PROXY_TOLERATIONS
+    default: |-
+      - operator: "Exists"
+    autoIndent: true
 components:
   # Pulls in the zarf-injector
   - name: zarf-injector
