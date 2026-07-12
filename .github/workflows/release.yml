@@ -1,6 +1,8 @@
 name: Release Zarf Package
 
 on:
+  schedule:
+    - cron: "0 0 * * *"
   push:
     branches:
       - main
@@ -30,6 +32,11 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+
+      - name: Get git info
+        id: describe
+        run: |-
+          echo "git_describe=$(git describe --first-parent --tags | sed -E 's!^.+/!!g')" >> "$GITHUB_OUTPUT"
 
       - name: Install The Latest Release Version of Zarf
         uses: zarf-dev/setup-zarf@10e539efed02f75ec39eb8823e22a5c795f492ae # v1.0.1
@@ -62,4 +69,13 @@ jobs:
         run: |-
           zarf package publish zarf-*.zst \
             oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
-            --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub
+            --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
+            --with-build-machine-info=false
+
+      - name: Publish Zarf package, tagged commit
+        run: |-
+          zarf package publish zarf-*.zst \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
+            --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
+            --with-build-machine-info=false \
+            --tag ${{ steps.describe.outputs.git_describe }}

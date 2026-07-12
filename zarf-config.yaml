@@ -6,8 +6,8 @@ package:
     set:
       injector_arm64_shasum: 7a677809accc0d3d9b1cddc8d6be07ebf0a883a1db887e50828bb3df0e824577
 
-      registry_image_domain: 'ghcr.io/'
-      registry_image: 'distribution/distribution'
+      registry_image_domain: 'reg.mini.dev/'
+      registry_image: 'distribution-registry'
       # renovate: datasource=docker depName=ghcr.io/distribution/distribution
       registry_image_tag: 3.1.1
 
@@ -19,7 +19,7 @@ package:
       # renovate: datasource=docker depName=docker.io/gitea/gitea
       gitea_image: ghcr.io/go-gitea/gitea:1.26.4-rootless
 
-      proxy_image_domain: 'docker.io/'
-      proxy_image: 'alpine/socat'
+      proxy_image_domain: 'reg.mini.dev/'
+      proxy_image: 'socat'
       # renovate: datasource=docker depName=docker.io/alpine/socat
       proxy_image_tag: "1.8.1.3"
