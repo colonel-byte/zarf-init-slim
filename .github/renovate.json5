@@ -24,7 +24,7 @@
   ],
   separateMajorMinor: false,
   "github-actions": {
-    enabled: false
+    enabled: true
   },
   dependencyDashboard: true,
   customManagers: [
