@@ -2,7 +2,7 @@ name: Release Zarf Package
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "15 2 * * *"
   push:
     branches:
       - main
@@ -31,8 +31,8 @@ jobs:
         id: git-tag
         run: |-
           if ${{ startsWith(github.ref, 'refs/tags/') }}; then
-            echo "tag=$(echo ${{ github.ref }} | sed 's!refs/tags/${{ env.DISTRO }}/!!g')"
-            echo "tag=$(echo ${{ github.ref }} | sed 's!refs/tags/${{ env.DISTRO }}/!!g')" >> $GITHUB_OUTPUT
+            echo "tag=$(echo ${{ github.ref }} | sed 's!refs/tags/!!g')"
+            echo "tag=$(echo ${{ github.ref }} | sed 's!refs/tags/!!g')" >> $GITHUB_OUTPUT
           else
             echo "TAG=''"
             echo "TAG=''" >> $GITHUB_OUTPUT
