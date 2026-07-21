@@ -1,0 +1,28 @@
+---
+secrets:
+  configData:
+    storage:
+      s3:
+        regionendpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:8080
+        secure: false
+        v4auth: true
+        forcepathstyle: true
+        chunksize: 5242880
+        multipartcopychunksize: 33554432
+        multipartcopymaxconcurrency: 100
+        multipartcopythresholdsize: 33554432
+      redirect:
+        disable: true
+
+extraEnvVars:
+  # Additional ENV variables to set
+  - name: REGISTRY_STORAGE_S3_SECRETKEY
+    valueFrom:
+      secretKeyRef:
+        name: registry-bucket
+        key: AWS_SECRET_ACCESS_KEY
+  - name: REGISTRY_STORAGE_S3_ACCESSKEY
+    valueFrom:
+      secretKeyRef:
+        name: registry-bucket
+        key: AWS_ACCESS_KEY_ID

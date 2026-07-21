@@ -56,6 +56,19 @@ components:
       # renovate: datasource=docker
       url: oci://ghcr.io/zarf-dev/packages/init:v0.81.1
 
+  # Creates the permanent registry
+  - name: zarf-registry-ceph
+    required: false
+    import:
+      name: zarf-registry
+      # renovate: datasource=docker
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.81.1
+    charts:
+      - name: docker-registry
+        valuesFiles:
+          - values/registry-core.yaml
+          - values/registry-rook.yaml
+
   # Creates the pod+git mutating webhook
   - name: zarf-agent
     required: false
