@@ -82,3 +82,7 @@ components:
     import:
       # renovate: datasource=docker
       url: oci://ghcr.io/zarf-dev/packages/init:v0.81.1
+    charts:
+      - name: gitea
+        # renovate: datasource=docker depName=registry-1.docker.io/giteacharts/gitea
+        version: 12.7.0
