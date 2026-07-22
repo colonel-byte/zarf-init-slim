@@ -1,0 +1,22 @@
+---
+autoscaling:
+  enabled: true
+  mapReplicasToNodes: false
+  minReplicas: 3
+  maxReplicas: 7
+  targetCPUUtilizationPercentage: 80
+
+affinity:
+  enabled: true
+  custom:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - docker-registry
+            topologyKey: kubernetes.io/hostname

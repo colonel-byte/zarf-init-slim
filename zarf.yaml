@@ -76,6 +76,7 @@ components:
         valuesFiles:
           - values/registry-core.yaml
           - values/registry-rook.yaml
+          - values/registry-high.yaml
 
   # Creates the pod+git mutating webhook
   - name: zarf-agent
