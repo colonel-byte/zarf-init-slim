@@ -6,7 +6,7 @@ secrets:
   configData:
     storage:
       s3:
-        regionendpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:80
+        regionendpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:8080
         region: "us-east-1"
         secure: false
         v4auth: true
