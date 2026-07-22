@@ -17,6 +17,10 @@ variables:
     default: |-
       - operator: "Exists"
     autoIndent: true
+  - name: NODE_INFRASTRUCTURE_LABEL
+    default: adrp.xyz/is-infra
+    description: |-
+      kubernets label that is used to indicate nodes that are used for infrastructure purposes
 components:
   # Pulls in the zarf-injector
   - name: zarf-injector
