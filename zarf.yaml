@@ -52,13 +52,21 @@ components:
   # Creates the permanent registry
   - name: zarf-registry
     required: false
+    only:
+      flavor: upstream
     import:
       # renovate: datasource=docker
       url: oci://ghcr.io/zarf-dev/packages/init:v0.81.1
+    charts:
+      - name: docker-registry
+        valuesFiles:
+          - values/registry-core.yaml
 
   # Creates the permanent registry
-  - name: zarf-registry-ceph
+  - name: zarf-registry
     required: false
+    only:
+      flavor: rook
     import:
       name: zarf-registry
       # renovate: datasource=docker

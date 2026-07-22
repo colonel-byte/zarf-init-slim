@@ -65,6 +65,7 @@ jobs:
       matrix:
         flavor:
           - upstream
+          - rook
         types:
           - amd64
           - arm64
