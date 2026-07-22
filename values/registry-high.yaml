@@ -7,7 +7,6 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
 
 affinity:
-  enabled: true
   custom:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

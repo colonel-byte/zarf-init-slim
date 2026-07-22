@@ -25,7 +25,16 @@ podLabels:
   zarf.dev/agent: "ignore"
 
 affinity:
-  enabled: false
+  enabled: true
+  custom:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: adrp.xyz/is-infra
+                operator: In
+                values:
+                  - "true"
 
 tolerations:
   - operator: Exists
