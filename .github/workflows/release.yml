@@ -115,4 +115,4 @@ jobs:
             oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
             --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
             --with-build-machine-info=false \
-            --tag ${{ needs.info.outputs.tag }}
+            --tag ${{ needs.info.outputs.tag }}-${{ matrix.flavor }}
