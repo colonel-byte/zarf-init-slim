@@ -66,6 +66,7 @@ jobs:
         flavor:
           - upstream
           - rook
+          - cloud
         types:
           - amd64
           - arm64

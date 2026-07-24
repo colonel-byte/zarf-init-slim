@@ -21,6 +21,18 @@ variables:
     default: adrp.xyz/is-infra
     description: |-
       kubernets label that is used to indicate nodes that are used for infrastructure purposes
+  - name: REGISTRY_S3_BUCKET_URL
+    default: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:8080
+    description: |-
+      s3 url where the registry will be pushed. defaults to using the rook-ceph endpoint; for AWS S3, set to empty string ""
+  - name: REGISTRY_S3_BUCKET_REGION
+    default: us-east-1
+    description: |-
+      region where the s3 bucket is hosted
+  - name: REGISTRY_S3_BUCKET_NAME
+    default: registry-bucket
+    description: |-
+      name of the s3 used for the zarf registry
 components:
   # Pulls in the zarf-injector
   - name: zarf-injector
@@ -79,7 +91,24 @@ components:
       - name: docker-registry
         valuesFiles:
           - values/registry-core.yaml
+          - values/registry-s3.yaml
           - values/registry-rook.yaml
+          - values/registry-high.yaml
+
+  # Creates the permanent registry
+  - name: zarf-registry
+    required: false
+    only:
+      flavor: cloud
+    import:
+      name: zarf-registry
+      # renovate: datasource=docker
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.82.0
+    charts:
+      - name: docker-registry
+        valuesFiles:
+          - values/registry-core.yaml
+          - values/registry-s3.yaml
           - values/registry-high.yaml
 
   # Creates the pod+git mutating webhook

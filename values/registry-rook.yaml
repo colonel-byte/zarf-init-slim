@@ -6,8 +6,6 @@ secrets:
   configData:
     storage:
       s3:
-        regionendpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:8080
-        region: "us-east-1"
         secure: false
         v4auth: true
         forcepathstyle: true
@@ -30,8 +28,3 @@ extraEnvVars:
       secretKeyRef:
         name: registry-bucket
         key: AWS_ACCESS_KEY_ID
-  - name: REGISTRY_STORAGE_S3_BUCKET
-    valueFrom:
-      configMapKeyRef:
-        name: registry-bucket
-        key: BUCKET_NAME
