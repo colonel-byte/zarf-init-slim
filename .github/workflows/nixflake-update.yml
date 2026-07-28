@@ -32,7 +32,7 @@ jobs:
         nix flake update
 
     - name: Commit & Push changes
-      uses: actions-js/push@5a7cbd780d82c0c937b5977586e641b2fd94acc5 # v1.5
+      uses: actions-js/push@968f4695ca558093eadb24ad83cc5891f47e0cdc # v1.6
       with:
         branch: 'main'
         message: "chore(flake): bump inputs"
