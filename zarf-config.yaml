@@ -16,8 +16,8 @@ package:
       # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
       agent_image_tag: v0.84.0
 
-      # renovate: datasource=docker depName=docker.io/gitea/gitea
-      gitea_image: ghcr.io/go-gitea/gitea:1.27.2-rootless
+      # renovate: datasource=docker depName=reg.mini.dev/gitea
+      gitea_image: reg.mini.dev/gitea:1.27.2
 
       proxy_image_domain: reg.mini.dev/
       proxy_image: socat
