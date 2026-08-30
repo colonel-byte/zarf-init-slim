@@ -17,7 +17,7 @@ package:
       agent_image_tag: v0.84.0
 
       # renovate: datasource=docker depName=reg.mini.dev/gitea
-      gitea_image: reg.mini.dev/gitea:1.27.2
+      gitea_image: reg.mini.dev/gitea:v1.27.3
 
       proxy_image_domain: reg.mini.dev/
       proxy_image: socat
