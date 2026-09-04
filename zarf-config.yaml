@@ -14,7 +14,7 @@ package:
       agent_image_domain: ghcr.io/
       agent_image: zarf-dev/zarf/agent
       # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
-      agent_image_tag: v0.84.0
+      agent_image_tag: v0.85.0
 
       # renovate: datasource=docker depName=reg.mini.dev/gitea
       gitea_image: reg.mini.dev/gitea:v1.27.3
