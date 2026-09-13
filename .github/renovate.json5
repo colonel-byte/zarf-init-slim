@@ -7,6 +7,10 @@
   assignees: [
     "@A1994SC"
   ],
+  baseBranchPatterns: [
+    "main",
+    "/^main\\/.*/"
+  ],
   packageRules: [
     {
       matchDatasources: [
