@@ -68,8 +68,6 @@ components:
   # Creates the permanent registry
   - name: zarf-registry
     required: false
-    only:
-      flavor: upstream
     import:
       # renovate: datasource=docker
       url: oci://ghcr.io/zarf-dev/packages/init:v0.85.0
@@ -77,39 +75,6 @@ components:
       - name: docker-registry
         valuesFiles:
           - values/registry-core.yaml
-
-  # Creates the permanent registry
-  - name: zarf-registry
-    required: false
-    only:
-      flavor: rook
-    import:
-      name: zarf-registry
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.85.0
-    charts:
-      - name: docker-registry
-        valuesFiles:
-          - values/registry-core.yaml
-          - values/registry-s3.yaml
-          - values/registry-rook.yaml
-          - values/registry-high.yaml
-
-  # Creates the permanent registry
-  - name: zarf-registry
-    required: false
-    only:
-      flavor: cloud
-    import:
-      name: zarf-registry
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.85.0
-    charts:
-      - name: docker-registry
-        valuesFiles:
-          - values/registry-core.yaml
-          - values/registry-s3.yaml
-          - values/registry-high.yaml
 
   # Creates the pod+git mutating webhook
   - name: zarf-agent

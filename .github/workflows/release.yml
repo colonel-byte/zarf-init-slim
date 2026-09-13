@@ -64,10 +64,6 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        flavor:
-          - upstream
-          - rook
-          - cloud
         types:
           - amd64
           - arm64
@@ -98,7 +94,6 @@ jobs:
         run: |-
           zarf package create --confirm . \
             --architecture ${{ matrix.types }} \
-            --flavor ${{ matrix.flavor }} \
             --signing-key env://COSIGN_KEY \
             --signing-key-pass ${{ secrets.COSIGN_PASS }}
         env:
@@ -117,4 +112,4 @@ jobs:
             oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
             --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
             --with-build-machine-info=false \
-            --tag ${{ needs.info.outputs.tag }}-${{ matrix.flavor }}
+            --tag ${{ needs.info.outputs.tag }}
