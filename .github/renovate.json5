@@ -9,7 +9,7 @@
   ],
   baseBranchPatterns: [
     "main",
-    "/^main\\/.*/"
+    "/^release\\/.*/"
   ],
   packageRules: [
     {
