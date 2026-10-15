@@ -8,8 +8,7 @@
     "@A1994SC"
   ],
   baseBranchPatterns: [
-    "main",
-    "/^release\\/.*/"
+    "main"
   ],
   packageRules: [
     {
@@ -24,6 +23,17 @@
         "ghcr.io/zarf-dev/packages/init",
         "ghcr.io/zarf-dev/zarf/agent"
       ]
+    },
+    {
+      // the gitea tag carries a "-rootless" suffix, which semver would read as
+      // a prerelease; match it explicitly so updates keep flowing
+      matchDatasources: [
+        "docker"
+      ],
+      matchPackageNames: [
+        "ghcr.io/go-gitea/gitea"
+      ],
+      versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-rootless$"
     },
   ],
   separateMajorMinor: false,

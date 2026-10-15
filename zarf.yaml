@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
 kind: ZarfInitConfig
 metadata:
-  name: slim
+  name: init-slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
   version: v0.87.0
   source: https://github.com/colonel-byte/zarf-slim-init
@@ -21,18 +21,6 @@ variables:
     default: adrp.xyz/is-infra
     description: |-
       kubernets label that is used to indicate nodes that are used for infrastructure purposes
-  - name: REGISTRY_S3_BUCKET_URL
-    default: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc.cluster.local:8080
-    description: |-
-      s3 url where the registry will be pushed. defaults to using the rook-ceph endpoint; for AWS S3, set to empty string ""
-  - name: REGISTRY_S3_BUCKET_REGION
-    default: us-east-1
-    description: |-
-      region where the s3 bucket is hosted
-  - name: REGISTRY_S3_BUCKET_NAME
-    default: registry-bucket
-    description: |-
-      name of the s3 used for the zarf registry
 components:
   # Pulls in the zarf-injector
   - name: zarf-injector

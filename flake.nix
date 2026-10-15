@@ -59,7 +59,7 @@
             programs.keep-sorted.enable = true;
             programs.nixfmt = {
               enable = true;
-              package = pkgs.nixfmt-rfc-style;
+              package = pkgs.nixfmt;
             };
             projectRootFile = "flake.nix";
             settings.formatter = {
@@ -91,7 +91,7 @@
               check-executables-have-shebangs.enable = true;
               check-shebang-scripts-are-executable.enable = true;
               end-of-file-fixer.enable = true;
-              nixfmt-rfc-style.enable = true;
+              nixfmt.enable = true;
               trim-trailing-whitespace.enable = true;
               # keep-sorted end
             };

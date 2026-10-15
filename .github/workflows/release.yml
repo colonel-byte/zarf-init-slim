@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - release/flavor
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
     paths-ignore:
@@ -102,14 +101,14 @@ jobs:
       - name: Publish Zarf package
         run: |-
           zarf package publish zarf-*.zst \
-            oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf \
             --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
             --with-build-machine-info=false
 
       - name: Publish Zarf package, tagged commit
         run: |-
           zarf package publish zarf-*.zst \
-            oci://ghcr.io/${{ github.repository_owner }}/zarf/init \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf \
             --key https://raw.githubusercontent.com/colonel-byte/zarf-slim-init/refs/heads/main/cosign.pub \
             --with-build-machine-info=false \
             --tag ${{ needs.info.outputs.tag }}

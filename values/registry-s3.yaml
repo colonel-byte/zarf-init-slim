@@ -1,8 +1,0 @@
----
-secrets:
-  configData:
-    storage:
-      s3:
-        regionendpoint: "###ZARF_VAR_REGISTRY_S3_BUCKET_URL###"
-        region: "###ZARF_VAR_REGISTRY_S3_BUCKET_REGION###"
-        bucket: "###ZARF_VAR_REGISTRY_S3_BUCKET_NAME###"
