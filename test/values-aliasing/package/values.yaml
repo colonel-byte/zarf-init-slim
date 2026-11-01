@@ -1,0 +1,11 @@
+---
+# nested.both is present under BOTH source paths with different values. That overlap is
+# what triggers the aliasing: a top-level key present under only one path copies correctly.
+#
+# Nothing here is contacted.
+shared:
+  nested:
+    both: from-shared
+extra:
+  nested:
+    both: from-extra

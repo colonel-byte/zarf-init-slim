@@ -1,0 +1,36 @@
+---
+# Byte-for-byte copy of k3d-config.yaml from colonel-byte/uds-bundles, minus its own
+# leading "---". Refresh it from upstream rather than editing it to suit this test: the
+# point is to reproduce on the cluster shape that repository actually deploys.
+#
+# Nothing here is contacted.
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: zarf
+servers: 1
+agents: 1
+# renovate: datasource=docker depName=docker.io/rancher/k3s versioning=regex:^v?(?<major>\d+)(\.(?<minor>\d+))?(\.(?<patch>\d+))-k3s?((?<build>\d+))$
+image: docker.io/rancher/k3s:v1.37.0-k3s1
+volumes:
+  - volume: /tmp/k3d:/var/lib/local-path-provisioner
+    nodeFilters:
+      - server:*
+      - agent:*
+options:
+  k3d:
+    disableImageVolume: false
+  k3s:
+    extraArgs:
+      - arg: "--disable=local-storage"
+        nodeFilters:
+          - server:*
+      - arg: "--disable=traefik"
+        nodeFilters:
+          - server:*
+      - arg: "--disable=traefik-crd"
+        nodeFilters:
+          - server:*
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
