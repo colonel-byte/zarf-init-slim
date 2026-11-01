@@ -30,6 +30,13 @@ registry:
                     values:
                       - docker-registry
               topologyKey: kubernetes.io/hostname
+# Overrides on top of `registry`, for the ephemeral registry that only exists until the
+# permanent one is up: no volume to provision and no replicas to scale.
+seedRegistry:
+  persistence:
+    enabled: false
+  autoscaling:
+    enabled: false
 agent:
   tolerations:
     - operator: Exists

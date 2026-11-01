@@ -1,0 +1,31 @@
+---
+# Fixture for the chart values aliasing regression test. See run.sh one directory up for
+# what it proves and why this repository cares.
+#
+# Only comp-a adds a second mapping (.extra). comp-b maps .shared alone, so comp-b must
+# render nested.both as from-shared. Each component deploys into its own namespace so both
+# ConfigMaps survive for the test to read.
+#
+# Nothing here is contacted.
+apiVersion: zarf.dev/v1beta1
+kind: ZarfPackageConfig
+metadata:
+  name: values-aliasing
+  version: 0.1.0
+values:
+  files:
+    - values.yaml
+components:
+  - name: comp-a
+    import:
+      local:
+        - path: comp-a.yaml
+    charts:
+      - name: demo
+        values:
+          - sourcePath: .extra
+            targetPath: .
+  - name: comp-b
+    import:
+      local:
+        - path: comp-b.yaml
