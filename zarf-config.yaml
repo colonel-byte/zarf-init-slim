@@ -2,24 +2,3 @@ log_format: console
 no_color: false
 package:
   oci_concurrency: 15
-  create:
-    set:
-      injector_arm64_shasum: 7a677809accc0d3d9b1cddc8d6be07ebf0a883a1db887e50828bb3df0e824577
-
-      registry_image_domain: ghcr.io/
-      registry_image: distribution/distribution
-      # renovate: datasource=docker depName=ghcr.io/distribution/distribution
-      registry_image_tag: 3.1.2
-
-      agent_image_domain: ghcr.io/
-      agent_image: zarf-dev/zarf/agent
-      # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
-      agent_image_tag: v1.0.0
-
-      # renovate: datasource=docker depName=ghcr.io/go-gitea/gitea
-      gitea_image: ghcr.io/go-gitea/gitea:28.3.0-rootless
-
-      proxy_image_domain: docker.io/
-      proxy_image: alpine/socat
-      # renovate: datasource=docker depName=docker.io/alpine/socat
-      proxy_image_tag: "1.8.1.3"
