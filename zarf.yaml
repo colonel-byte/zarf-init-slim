@@ -1,83 +1,72 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+apiVersion: zarf.dev/v1beta1
 kind: ZarfInitConfig
 metadata:
   name: init-slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
   version: v0.89.0
-  source: https://github.com/colonel-byte/zarf-slim-init
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-slim-init"
-variables:
-  - name: AGENT_TOLERATIONS
-    default: |-
-      - operator: "Exists"
-    autoIndent: true
-  - name: PROXY_TOLERATIONS
-    default: |-
-      - operator: "Exists"
-    autoIndent: true
-  - name: NODE_INFRASTRUCTURE_LABEL
-    default: adrp.xyz/is-infra
-    description: |-
-      kubernets label that is used to indicate nodes that are used for infrastructure purposes
+values:
+  files:
+    - values/init-slim.yaml
 components:
-  # Pulls in the zarf-injector
+  # Injects the seed registry into the cluster; upstream publishes one multi-arch
+  # component config, so no architecture selector is needed.
   - name: zarf-injector
-    required: false
-    only:
-      cluster:
-        architecture: amd64
+    optional: true
     import:
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.89.0
+      remote:
+        # renovate: datasource=docker
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-injector:v0.89.0
 
-  # Pulls in the zarf-injector
-  - name: zarf-injector
-    required: false
-    only:
-      cluster:
-        architecture: arm64
-    import:
-      path: injector
-
-  # This package moves the injector & registries binaries
+  # Bootstraps the registry from the injected registry image
   - name: zarf-seed-registry
-    required: false
+    optional: true
     import:
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.89.0
-    charts:
-      - name: docker-registry
-        valuesFiles:
-          - values/registry-core.yaml
-          - values/registry-seed.yaml
+      remote:
+        # renovate: datasource=docker
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-seed-registry:v0.89.0
+    images:
+      # renovate: datasource=docker depName=ghcr.io/distribution/distribution
+      - name: ghcr.io/distribution/distribution:3.1.2
+        id: registry
+      # renovate: datasource=docker depName=docker.io/alpine/socat
+      - name: docker.io/alpine/socat:1.8.1.3
+        id: proxy
 
   # Creates the permanent registry
   - name: zarf-registry
-    required: false
+    optional: true
     import:
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.89.0
-    charts:
-      - name: docker-registry
-        valuesFiles:
-          - values/registry-core.yaml
+      remote:
+        # renovate: datasource=docker
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-registry:v0.89.0
+    images:
+      # renovate: datasource=docker depName=ghcr.io/distribution/distribution
+      - name: ghcr.io/distribution/distribution:3.1.2
+        id: registry
+      # renovate: datasource=docker depName=docker.io/alpine/socat
+      - name: docker.io/alpine/socat:1.8.1.3
+        id: proxy
 
   # Creates the pod+git mutating webhook
   - name: zarf-agent
-    required: false
+    optional: true
     import:
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.89.0
+      remote:
+        # renovate: datasource=docker
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-agent:v0.89.0
 
   # Adds a git server to the cluster
   - name: git-server
-    required: false
+    optional: true
     import:
-      # renovate: datasource=docker
-      url: oci://ghcr.io/zarf-dev/packages/init:v0.89.0
-    charts:
-      - name: gitea
-        # renovate: datasource=docker depName=docker.io/giteacharts/gitea
-        version: 12.7.0
+      remote:
+        # renovate: datasource=docker
+        - url: oci://ghcr.io/zarf-dev/components/init/git-server:v0.89.0
+    images:
+      # renovate: datasource=docker depName=ghcr.io/go-gitea/gitea
+      - name: ghcr.io/go-gitea/gitea:28.3.0-rootless
+        id: git-server
