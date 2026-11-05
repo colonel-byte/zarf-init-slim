@@ -1,0 +1,4 @@
+---
+# Defaults, overwritten by whichever package values path the component maps.
+nested:
+  both: unset

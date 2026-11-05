@@ -1,0 +1,8 @@
+---
+# Minimal chart for the values-aliasing reproduction. It renders one ConfigMap holding the
+# value the chart actually received, so the test can read it back off the cluster.
+#
+# Nothing here is contacted.
+apiVersion: v2
+name: demo
+version: 0.1.0

@@ -14,6 +14,7 @@ All components are optional to allow staged deployments (e.g., seeding a cluster
   - `nixflake-update.yml`: Flake input updater workflow.
 - `.github/renovate.json5`: Renovate configuration tracking upstream package tags and images.
 - `zarf-v1beta1-values-aliasing.md`: Bug report for upstream Zarf, written to the `bug_report.md` issue template. A chart `values[]` mapping on one component changes the values another component's chart receives. This is why the seed registry has no settings of its own in `values/init-slim.yaml`.
+- `test/values-aliasing/`: End-to-end reproduction for that bug. `run.sh` creates a throwaway k3d cluster, deploys the package in `package/`, reads back the ConfigMap each chart rendered, and exits 0 when the wrong value reached the cluster. `k3d-config.yaml` is a verbatim copy of the one in `colonel-byte/uds-bundles` - refresh it from upstream rather than editing it for a test.
 
 ## Storage Architecture & Guidelines
 1. **No Package Flavors:**
@@ -31,6 +32,53 @@ All components are optional to allow staged deployments (e.g., seeding a cluster
    - Definition check: `ZARF_CONFIG=zarf-config.yaml zarf dev inspect definition .`
    - Creation test: `zarf package create --confirm . --architecture amd64` (and `arm64`)
    - Rendered chart values: `zarf package inspect values-files zarf-init-amd64-*.tar.zst`
+   - Values aliasing reproduction: `./test/values-aliasing/run.sh` (needs k3d, kubectl, docker; skips with a reason when one is missing)
+
+## Removing the values-aliasing workaround
+
+The seed registry has no settings of its own because of the upstream bug in [`zarf-v1beta1-values-aliasing.md`](zarf-v1beta1-values-aliasing.md). When that bug is fixed, three things come out of the repo and one thing goes back in. Do all four together: the files are the only record of why the seed registry is configured the way it is.
+
+Check first. `./test/values-aliasing/run.sh` prints `NOT REPRODUCED` and exits 1 on a zarf that carries the fix, which is the whole point of the script. A passing run (exit 0) means the bug is still there and nothing below should be done.
+
+1. Delete `test/values-aliasing/` and `zarf-v1beta1-values-aliasing.md`.
+2. Delete the two `Repository Layout` entries for them, the `Values aliasing reproduction` line under `Verification Commands`, and this section.
+3. Give the seed registry its own values path again in `zarf.yaml`, so that an ephemeral registry stops provisioning a 20Gi volume:
+
+   ```yaml
+   - name: zarf-seed-registry
+     optional: true
+     import:
+       remote:
+         # renovate: datasource=docker
+         - url: oci://ghcr.io/zarf-dev/components/init/zarf-seed-registry:v0.89.0
+     charts:
+       - name: docker-registry
+         values:
+           - sourcePath: .seedRegistry
+             targetPath: .
+   ```
+
+   With the matching block in `values/init-slim.yaml`:
+
+   ```yaml
+   seedRegistry:
+     persistence:
+       enabled: false
+     autoscaling:
+       enabled: false
+   ```
+
+4. Prove the fix held. Build the package and read both registries back:
+
+   ```console
+   zarf package create --confirm . --architecture amd64
+   zarf package inspect values-files zarf-init-amd64-*.tar.zst --components zarf-seed-registry
+   zarf package inspect values-files zarf-init-amd64-*.tar.zst --components zarf-registry
+   ```
+
+   The seed registry must report `persistence.enabled: false` and the permanent registry must report `persistence.enabled: true`. Run the same two commands without `--components` as well: reading the full package is what exposed the bug in the first place, and a per-component check alone would have missed it.
+
+Upstream components other than the registry may gain their own values paths in the same release. If `zarf-seed-registry` starts mapping something other than `.registry`, prefer that over the remap above and delete the `seedRegistry` block.
 
 ## Dependency Updates
 
