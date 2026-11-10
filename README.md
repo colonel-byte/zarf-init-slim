@@ -4,7 +4,7 @@ This is a vanilla-compatible slim package of the upstream Zarf init components, 
 
 All components are made optional to allow deploying different components slowly over the course of an install.
 
-The package uses the `zarf.dev/v1beta1` API and composes the upstream component configs published at `oci://ghcr.io/zarf-dev/components/init/*`. Configuration is done with **values**, not deploy variables: either a values file (`zarf package deploy -v my-values.yaml`) or `--set-values key.path=value`. Each component exposes its chart under a top-level key - `registry` (both registries), `agent`, and `gitServer`.
+The package uses the `zarf.dev/v1beta1` API and composes the upstream component configs published at `oci://ghcr.io/zarf-dev/components/init/*`. Configuration is done with **values**, not deploy variables: either a values file (`zarf package deploy -v my-values.yaml`) or `--set-values key.path=value`. Each component exposes its chart under a top-level key - `registry` (the base for both registries), `seedRegistry` (overrides on top of `registry`, for the ephemeral one), `agent`, and `gitServer`.
 
 ## Using an S3-Compatible Storage Backend (e.g., Rook-Ceph OBC)
 
@@ -68,11 +68,12 @@ Replicas are already spread across nodes: `values/init-slim.yaml` sets a preferr
 
 `values/init-slim.yaml` ships with the package and is applied after the upstream component defaults, so it decides these keys unless you override them at deploy time:
 
-| Value path                                              | What it does                                                                                                |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `registry.tolerations`, `registry.proxy.tolerations`    | `operator: Exists` - registry and its proxy tolerate any taint                                              |
-| `registry.affinity.enabled`, `registry.affinity.custom` | Registry pods only schedule onto nodes labelled `adrp.xyz/is-infra=true`, and prefer to spread across hosts |
-| `registry.serviceAccount`                               | Creates a `docker-registry` service account                                                                 |
-| `agent.tolerations`                                     | `operator: Exists` for the Zarf agent                                                                       |
+| Value path                                                             | What it does                                                                                                         |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `registry.tolerations`, `registry.proxy.tolerations`                   | `operator: Exists` - registry and its proxy tolerate any taint                                                       |
+| `registry.affinity.enabled`, `registry.affinity.custom`                | Registry pods only schedule onto nodes labelled `adrp.xyz/is-infra=true`, and prefer to spread across hosts          |
+| `registry.serviceAccount`                                              | Creates a `docker-registry` service account                                                                          |
+| `agent.tolerations`                                                    | `operator: Exists` for the Zarf agent                                                                                |
+| `seedRegistry.persistence.enabled`, `seedRegistry.autoscaling.enabled` | `false` - the seed registry is torn down once the permanent one is up, so it provisions no volume and does not scale |
 
 The infrastructure node label is baked in at `adrp.xyz/is-infra`. **Label the nodes first**, or override `registry.affinity.custom` at deploy time, or the registry will not schedule.

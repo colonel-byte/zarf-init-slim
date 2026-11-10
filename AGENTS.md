@@ -27,7 +27,7 @@ All components are optional to allow staged deployments (e.g., seeding a cluster
      - Both go in a deploy-time values file (`zarf package deploy -v s3-values.yaml`) or `--set-values`, not in `values/init-slim.yaml`.
 3. **Verification Commands:**
    - Linting: `ZARF_CONFIG=zarf-config.yaml zarf dev lint .`
-   - Renovate config: `npx --yes renovate-config-validator .github/renovate.json5`
+   - Renovate config: `npx --yes --package renovate -- renovate-config-validator .github/renovate.json5` (the validator is a bin of the `renovate` package, so `npx renovate-config-validator` alone cannot resolve it)
    - Definition check: `ZARF_CONFIG=zarf-config.yaml zarf dev inspect definition .`
    - Creation test: `zarf package create --confirm . --architecture amd64` (and `arm64`)
    - Rendered chart values: `zarf package inspect values-files zarf-init-amd64-*.tar.zst`
