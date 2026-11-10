@@ -12,16 +12,20 @@
   ],
   packageRules: [
     {
+      // the zarf CLI, the agent image and the imported component configs are all
+      // released together and must move together
       matchDatasources: [
-        "docker"
+        "docker",
+        "github-releases"
       ],
       addLabels: [
         "renovate/oci"
       ],
       groupName: "Zarf packages",
       matchPackageNames: [
-        "ghcr.io/zarf-dev/packages/init",
-        "ghcr.io/zarf-dev/zarf/agent"
+        "ghcr.io/zarf-dev/components/init/**",
+        "ghcr.io/zarf-dev/zarf/agent",
+        "zarf-dev/zarf"
       ]
     },
     {
