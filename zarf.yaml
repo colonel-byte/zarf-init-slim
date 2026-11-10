@@ -28,6 +28,13 @@ components:
       remote:
         # renovate: datasource=docker
         - url: oci://ghcr.io/zarf-dev/components/init/zarf-seed-registry:v1.0.0
+    charts:
+      # Adds to the upstream `.registry` mapping rather than replacing it, so the seed
+      # registry inherits the shared settings and overrides only what it needs.
+      - name: docker-registry
+        values:
+          - sourcePath: .seedRegistry
+            targetPath: .
     images:
       # renovate: datasource=docker depName=ghcr.io/distribution/distribution
       - name: ghcr.io/distribution/distribution:3.1.2

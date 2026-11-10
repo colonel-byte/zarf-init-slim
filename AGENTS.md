@@ -7,13 +7,13 @@ All components are optional to allow staged deployments (e.g., seeding a cluster
 
 ## Repository Layout
 - `zarf.yaml`: Main package definition. Each component imports an upstream component config from `oci://ghcr.io/zarf-dev/components/init/<name>:<zarf version>` (`zarf-injector`, `zarf-seed-registry`, `zarf-registry`, `zarf-agent`, `git-server`), marks it `optional: true`, and overrides images by `id` so renovate can bump them independently of the zarf release.
-- `values/init-slim.yaml`: Package values, declared via `values.files` in `zarf.yaml`. Keyed by the value path each component exposes: `registry` (shared by BOTH registries), `agent`, `gitServer`. Applied after the upstream component defaults. Do NOT add keys here that users are expected to set at deploy time (notably `autoscaling`, `persistence` and `extraEnvVars`).
+- `values/init-slim.yaml`: Package values, declared via `values.files` in `zarf.yaml`. Keyed by the value path each component exposes: `registry` (the base for BOTH registries), `seedRegistry` (overrides on top of `registry`, for the ephemeral one), `agent`, `gitServer`. Applied after the upstream component defaults. Do NOT add keys under `registry` that users are expected to set at deploy time (notably `autoscaling`, `persistence` and `extraEnvVars`). `seedRegistry` is exempt: nothing deploy-time configures a registry that is torn down minutes later.
 - `zarf-config.yaml`: CLI config only (log format, OCI concurrency). Image pinning lives in `zarf.yaml` now; v1beta1 components ship pre-rendered, so there are no `###ZARF_PKG_TMPL_*###` values to set at create time.
 - `.github/workflows/`:
   - `release.yml`: Multi-architecture release workflow (`amd64`, `arm64`).
   - `nixflake-update.yml`: Flake input updater workflow.
 - `.github/renovate.json5`: Renovate configuration tracking upstream package tags and images.
-- `zarf-v1beta1-values-aliasing.md`: Bug report for upstream Zarf, written to the `bug_report.md` issue template. A chart `values[]` mapping on one component changes the values another component's chart receives. This is why the seed registry has no settings of its own in `values/init-slim.yaml`.
+- `test/values-aliasing/`: End-to-end regression test for chart values aliasing - a `values[]` mapping on one component leaking into another component's chart. Zarf carried that bug before v1.0.0, and it is why `seedRegistry` can exist as a values path at all, so the test stays. `run.sh` creates a throwaway k3d cluster, deploys the package in `package/`, reads back the ConfigMap each chart rendered, and exits 0 when each chart got only its own values. `k3d-config.yaml` is a verbatim copy of the one in `colonel-byte/uds-bundles` - refresh it from upstream rather than editing it for a test.
 
 ## Storage Architecture & Guidelines
 1. **No Package Flavors:**
@@ -31,6 +31,7 @@ All components are optional to allow staged deployments (e.g., seeding a cluster
    - Definition check: `ZARF_CONFIG=zarf-config.yaml zarf dev inspect definition .`
    - Creation test: `zarf package create --confirm . --architecture amd64` (and `arm64`)
    - Rendered chart values: `zarf package inspect values-files zarf-init-amd64-*.tar.zst`
+   - Values aliasing regression test: `./test/values-aliasing/run.sh` (needs k3d, kubectl, docker; skips with a reason when one is missing)
 
 ## Dependency Updates
 
