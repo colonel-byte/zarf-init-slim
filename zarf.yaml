@@ -5,7 +5,7 @@ kind: ZarfInitConfig
 metadata:
   name: init-slim
   # renovate: datasource=docker depName=ghcr.io/zarf-dev/zarf/agent
-  version: v1.0.0
+  version: v1.0.1
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-slim-init"
 values:
@@ -19,7 +19,7 @@ components:
     import:
       remote:
         # renovate: datasource=docker
-        - url: oci://ghcr.io/zarf-dev/components/init/zarf-injector:v1.0.0
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-injector:v1.0.1
 
   # Bootstraps the registry from the injected registry image
   - name: zarf-seed-registry
@@ -27,7 +27,7 @@ components:
     import:
       remote:
         # renovate: datasource=docker
-        - url: oci://ghcr.io/zarf-dev/components/init/zarf-seed-registry:v1.0.0
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-seed-registry:v1.0.1
     charts:
       # Adds to the upstream `.registry` mapping rather than replacing it, so the seed
       # registry inherits the shared settings and overrides only what it needs.
@@ -49,7 +49,7 @@ components:
     import:
       remote:
         # renovate: datasource=docker
-        - url: oci://ghcr.io/zarf-dev/components/init/zarf-registry:v1.0.0
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-registry:v1.0.1
     images:
       # renovate: datasource=docker depName=ghcr.io/distribution/distribution
       - name: ghcr.io/distribution/distribution:3.1.2
@@ -64,7 +64,7 @@ components:
     import:
       remote:
         # renovate: datasource=docker
-        - url: oci://ghcr.io/zarf-dev/components/init/zarf-agent:v1.0.0
+        - url: oci://ghcr.io/zarf-dev/components/init/zarf-agent:v1.0.1
 
   # Adds a git server to the cluster
   - name: git-server
@@ -72,7 +72,7 @@ components:
     import:
       remote:
         # renovate: datasource=docker
-        - url: oci://ghcr.io/zarf-dev/components/init/git-server:v1.0.0
+        - url: oci://ghcr.io/zarf-dev/components/init/git-server:v1.0.1
     images:
       # renovate: datasource=docker depName=ghcr.io/go-gitea/gitea
       - name: ghcr.io/go-gitea/gitea:28.3.0-rootless
