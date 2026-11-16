@@ -75,5 +75,5 @@ components:
         - url: oci://ghcr.io/zarf-dev/components/init/git-server:v1.0.1
     images:
       # renovate: datasource=docker depName=ghcr.io/go-gitea/gitea
-      - name: ghcr.io/go-gitea/gitea:28.3.0-rootless
+      - name: ghcr.io/go-gitea/gitea:28.4.0-rootless
         id: git-server
